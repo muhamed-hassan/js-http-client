@@ -1,9 +1,20 @@
 
+/*
+ * Designed to be extended (inherited) to hide the low level complexity a bit and generalize the HTTP verbs usage.
+ * 
+ * Abstract Example: 
+ * - ChildClientClass extends HttpClient => Where `ChildClient` is replaced with a proper name where it follows SRP and KISS 
+ * 
+ * */
 class HttpClient {
+
+    constructor(providerBaseUrl) {
+        this.providerBaseUrl = providerBaseUrl;
+    }
     
     doGet(requestUrl, requestHeaders) {
         var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", this.getUrlProtocol() + requestUrl, false);
+        xhttp.open("GET", this.providerBaseUrl + requestUrl, false);
         this.fillRequestHeaders(requestHeaders, xhttp);
         xhttp.send();
     
@@ -16,7 +27,7 @@ class HttpClient {
     
     doPost(requestUrl, requestHeaders, requestPayload) {
         var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", this.getUrlProtocol() + requestUrl, false);
+        xhttp.open("POST", this.providerBaseUrl + requestUrl, false);
         this.fillRequestHeaders(requestHeaders, xhttp);
         xhttp.send(requestPayload);
     
@@ -29,7 +40,7 @@ class HttpClient {
     
     doDelete(requestUrl) {
         var xhttp = new XMLHttpRequest();
-        xhttp.open("DELETE", this.getUrlProtocol() + requestUrl, false);
+        xhttp.open("DELETE", this.providerBaseUrl + requestUrl, false);
         xhttp.send();
     
         if (xhttp.status != 204) {
@@ -41,7 +52,7 @@ class HttpClient {
     
     doPut(requestUrl, requestHeaders, requestPayload) {
         var xhttp = new XMLHttpRequest();
-        xhttp.open("PUT", this.getUrlProtocol() + requestUrl, false);
+        xhttp.open("PUT", this.providerBaseUrl + requestUrl, false);
         this.fillRequestHeaders(requestHeaders, xhttp);
         xhttp.send(requestPayload);
     
@@ -60,10 +71,6 @@ class HttpClient {
                 xhttp.setRequestHeader(entry[0], entry[1]);
             }
         }
-    }
-
-    getUrlProtocol() {
-        return "http://";
     }
 
     constructHttpStatus(xhttp) {
