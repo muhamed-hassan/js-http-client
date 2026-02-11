@@ -5,15 +5,17 @@
  * # Abstract example: 
  * ChildClientClass extends HttpClient => Where `ChildClient` is replaced with a proper name where it follows SRP and KISS 
  *
- * # Backend service provider base url
- * serviceProviderBaseUrl is injected via app configurations
- * 
+ * # DNS of backend
+ * - dnsOfBackend is injected via app configurations
+ * - all backend restful-web-services are aggregated under single name called backend
+ *
  * */
+
 class HttpClient {
     
     doGet(requestUrl, requestHeaders) {
         var xhttp = new XMLHttpRequest();
-        xhttp.open("GET", serviceProviderBaseUrl + requestUrl, false);
+        xhttp.open("GET", dnsOfBackend + requestUrl, false);
         this.fillRequestHeaders(requestHeaders, xhttp);
         xhttp.send();
 
@@ -23,7 +25,7 @@ class HttpClient {
             case 404:
                 throw new Error(JSON.parse(xhttp.response).error);
             case 400:
-                throw new Error(xhttp.response);                
+                throw new Error(xhttp.response);
             default:
                 throw new Error("Error of " + xhttp.statusText);
         }
@@ -32,7 +34,7 @@ class HttpClient {
     
     doPost(requestUrl, requestHeaders, requestPayload) {
         var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", serviceProviderBaseUrl + requestUrl, false);
+        xhttp.open("POST", dnsOfBackend + requestUrl, false);
         this.fillRequestHeaders(requestHeaders, xhttp);
         xhttp.send(requestPayload);
 
@@ -49,14 +51,12 @@ class HttpClient {
     
     doDelete(requestUrl) {
         var xhttp = new XMLHttpRequest();
-        xhttp.open("DELETE", serviceProviderBaseUrl + requestUrl, false);
+        xhttp.open("DELETE", dnsOfBackend + requestUrl, false);
         xhttp.send();
 
         switch (xhttp.status) {
             case 204:
                 break;
-            case 404:
-                throw new Error(JSON.parse(xhttp.response).error);
             default:
                 throw new Error("Error of " + xhttp.statusText);
         }
@@ -65,7 +65,7 @@ class HttpClient {
     
     doPut(requestUrl, requestHeaders, requestPayload) {
         var xhttp = new XMLHttpRequest();
-        xhttp.open("PUT", serviceProviderBaseUrl + requestUrl, false);
+        xhttp.open("PUT", dnsOfBackend + requestUrl, false);
         this.fillRequestHeaders(requestHeaders, xhttp);
         xhttp.send(requestPayload);
 
@@ -91,4 +91,5 @@ class HttpClient {
     }
 
 }
+
 
