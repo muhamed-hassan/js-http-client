@@ -13,6 +13,23 @@
 
 class HttpClient {
     
+    doPost(requestUrl, requestHeaders, requestPayload) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("POST", dnsOfBackend + requestUrl, false);
+        this.fillRequestHeaders(requestHeaders, xhttp);
+        xhttp.send(requestPayload);
+
+        switch (xhttp.status) {
+            case 201:
+                break;
+            case 400:
+                throw new Error(xhttp.response);
+            default:
+                throw new Error("Error of " + xhttp.statusText);
+        }
+        
+    }
+
     doGet(requestUrl, requestHeaders) {
         var xhttp = new XMLHttpRequest();
         xhttp.open("GET", dnsOfBackend + requestUrl, false);
@@ -32,37 +49,6 @@ class HttpClient {
     
     }
     
-    doPost(requestUrl, requestHeaders, requestPayload) {
-        var xhttp = new XMLHttpRequest();
-        xhttp.open("POST", dnsOfBackend + requestUrl, false);
-        this.fillRequestHeaders(requestHeaders, xhttp);
-        xhttp.send(requestPayload);
-
-        switch (xhttp.status) {
-            case 201:
-                break;
-            case 400:
-                throw new Error(xhttp.response);
-            default:
-                throw new Error("Error of " + xhttp.statusText);
-        }
-        
-    }
-    
-    doDelete(requestUrl) {
-        var xhttp = new XMLHttpRequest();
-        xhttp.open("DELETE", dnsOfBackend + requestUrl, false);
-        xhttp.send();
-
-        switch (xhttp.status) {
-            case 204:
-                break;
-            default:
-                throw new Error("Error of " + xhttp.statusText);
-        }
-
-    }
-    
     doPut(requestUrl, requestHeaders, requestPayload) {
         var xhttp = new XMLHttpRequest();
         xhttp.open("PUT", dnsOfBackend + requestUrl, false);
@@ -74,6 +60,20 @@ class HttpClient {
                 break;
             case 400:
                 throw new Error(xhttp.response);
+            default:
+                throw new Error("Error of " + xhttp.statusText);
+        }
+
+    }
+
+    doDelete(requestUrl) {
+        var xhttp = new XMLHttpRequest();
+        xhttp.open("DELETE", dnsOfBackend + requestUrl, false);
+        xhttp.send();
+
+        switch (xhttp.status) {
+            case 204:
+                break;
             default:
                 throw new Error("Error of " + xhttp.statusText);
         }
